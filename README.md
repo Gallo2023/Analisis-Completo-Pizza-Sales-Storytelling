@@ -16,3 +16,7 @@ En construccion...
 - Desarrollo de un dashboard rapido dentro del mismo Excel.
 - Armado de un dashboard mas completo en Looker Studio.
 - Desarrollo de un Dashboard completo y profesional en Power BI para una presentacion al cliente final.
+
+#### 👨‍💻 Author
+###### Gabriel Gallardo
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/gerardo-gabriel-gallardo-12619ab5)
