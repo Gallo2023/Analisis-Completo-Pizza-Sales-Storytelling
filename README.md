@@ -8,7 +8,7 @@ buscando tendencia, comparativas de ventas y cantidades con diferentes aperturas
 
 ## 🖼️ Vista previa
 
-🛠️En construccion...
+🛠️En construccion...🛠️
 
 ## 🚀 Tecnologías
 - Excel en primera fase para un analisis exploratorio inicial.
