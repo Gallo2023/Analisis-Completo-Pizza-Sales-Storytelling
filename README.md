@@ -7,7 +7,7 @@ En base a unos datos recolectados de la operatoria tipica de una pizzeria, comen
 buscando tendencia, comparativas de ventas y cantidades con diferentes aperturas.
 
 Se sumo una ilustracion resumiendo los principales hallazgos con la asistencia de Gemini Nano Banana.
-<img src="./Gemini_Generated_Image.PNG" width="500"/>
+<img src="Gemini_Generated_Image.png" width="500"/>
 
 ## 🖼️ Vista previa
 
