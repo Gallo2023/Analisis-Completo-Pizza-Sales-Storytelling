@@ -4,7 +4,9 @@
 
 Este proyecto inicia un proceso de analisis completo de venta de pizzas.
 En base a unos datos recolectados de la operatoria tipica de una pizzeria, comenzamos buscando patrones de comportamiento
-buscando tendencia, comparativas de ventas y cantidades con diferentes aperturas
+buscando tendencia, comparativas de ventas y cantidades con diferentes aperturas.
+
+Se sumo una ilustracion resumiendo los principales hallazgos con la asistencia de Gemini Nano Banana.
 
 ## 🖼️ Vista previa
 
@@ -16,6 +18,7 @@ buscando tendencia, comparativas de ventas y cantidades con diferentes aperturas
 - Desarrollo de un dashboard rapido dentro del mismo Excel.
 - Armado de un dashboard mas completo en Looker Studio.
 - Desarrollo de un Dashboard completo y profesional en Power BI para una presentacion al cliente final.
+- Gemini Nano Banana (Ilustracion Métricas)
 
 #### 👨‍💻 Author
 ###### Gabriel Gallardo
