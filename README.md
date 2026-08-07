@@ -13,6 +13,7 @@ Analisis completo preliminar (ETL + EDA + Calculos Estadisticos Basicos)
 
 ## 🖼️ Vista previa
 
+Dashboard Excel
 🛠️En construccion...🛠️
 
 ## 🚀 Tecnologías
