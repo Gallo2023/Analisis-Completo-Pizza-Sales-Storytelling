@@ -1,1 +1,5 @@
-﻿Hola, diseña una infografia, en base a la informacion que te voy a pasar, se debe enfocar en los KPIs de un analisis de ventas de pizzas y sus respectivos insigths que tambien te voy a pasar, es para subir en linkedin, fondo negro, el texto debe ser claro, legible y preciso. La precision es mas importante que la estetica. A continuacion te paso la info que se debe mostrar:
+﻿Hola, diseña una infografia, en base a la informacion que te voy a pasar, 
+se debe enfocar en los KPIs de un analisis de ventas de pizzas y 
+sus respectivos insigths que tambien te voy a pasar,
+es para subir en linkedin, fondo negro, el texto debe ser claro, legible y preciso. 
+La precision es mas importante que la estetica. A continuacion te paso la info que se debe mostrar:
