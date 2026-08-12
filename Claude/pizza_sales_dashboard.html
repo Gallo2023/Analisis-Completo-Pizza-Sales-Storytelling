@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Sales — Panel de control 2015</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ===== Tokens ===== */
+:root{
+  --bg: #060b0f;
+  --bg-2: #081117;
+  --surface: #0d161d;
+  --surface-2: #121e26;
+  --border: #1b2b34;
+  --text: #eaf3f2;
+  --text-dim: #8ba3ab;
+  --text-faint: #5c747c;
+  --green: #33e6a8;
+  --green-dim: #1b8f68;
+  --blue: #3d95ff;
+  --blue-dim: #1f5fb8;
+  --amber: #ffb04d;
+  --radius: 14px;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+::selection{ background: var(--green-dim); color: #04140f; }
+
+/* ambient glow */
+.crust-glow{
+  position: fixed;
+  inset: -20% -10% auto -10%;
+  height: 60vh;
+  background:
+    radial-gradient(45% 55% at 20% 10%, rgba(51,230,168,0.14), transparent 70%),
+    radial-gradient(40% 50% at 85% 0%, rgba(61,149,255,0.16), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main{ position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 28px 80px; }
+
+/* ===== Header ===== */
+.top{
+  position: sticky; top:0; z-index: 20;
+  background: rgba(6,11,15,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.top-inner{
+  max-width: 1280px; margin: 0 auto; padding: 18px 28px;
+  display:flex; align-items:center; justify-content:space-between; gap: 16px; flex-wrap: wrap;
+}
+.brand{ display:flex; align-items:center; gap:14px; }
+.brand-mark{
+  font-size: 28px;
+  width: 46px; height:46px; display:grid; place-items:center;
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(51,230,168,0.18), rgba(61,149,255,0.18));
+  border: 1px solid var(--border);
+}
+h1{
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 700; margin:0;
+  letter-spacing: -0.02em;
+}
+.accent{ color: var(--green); }
+.brand-sub{ margin:2px 0 0; font-size: 13px; color: var(--text-dim); }
+.top-badge{
+  font-family: var(--font-mono); font-size: 12px; color: var(--text-dim);
+  display:flex; align-items:center; gap:8px;
+  padding: 8px 14px; border:1px solid var(--border); border-radius: 999px;
+  background: var(--surface);
+}
+.top-badge strong{ color: var(--text); }
+.dot{ width:7px; height:7px; border-radius:50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+/* ===== Section titles ===== */
+.section-title{
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600; letter-spacing: -0.01em;
+  display:flex; align-items:baseline; gap: 12px;
+  margin: 0 0 6px;
+}
+.section-title .num{
+  font-family: var(--font-mono); font-size: 13px; color: var(--green);
+  border: 1px solid var(--green-dim); border-radius: 6px; padding: 2px 7px;
+}
+.section-desc{ color: var(--text-dim); font-size: 14px; max-width: 46ch; margin: 10px 0 0; }
+
+/* ===== KPI strip ===== */
+.kpi-grid{
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1.6fr repeat(4, 1fr);
+  gap: 14px;
+}
+.kpi-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s ease, transform .2s ease;
+}
+.kpi-card:hover{ border-color: var(--green-dim); transform: translateY(-2px); }
+.kpi-hero{
+  background: linear-gradient(155deg, rgba(51,230,168,0.10), rgba(61,149,255,0.08));
+  border-color: rgba(51,230,168,0.35);
+}
+.kpi-label{ font-size: 12.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; }
+.kpi-value{ font-family: var(--font-mono); font-size: 28px; font-weight: 700; color: var(--text); }
+.kpi-hero .kpi-value{ font-size: 34px; background: linear-gradient(90deg, var(--green), var(--blue)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.kpi-foot{ font-size: 12px; color: var(--text-faint); }
+
+/* ===== Insights ===== */
+.insights{ margin-top: 56px; }
+.insight-grid{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.insight-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.insight-card:nth-child(3n-1){ border-left-color: var(--blue); }
+.insight-card:nth-child(3n){ border-left-color: var(--amber); }
+.insight-card b{ color: var(--text); font-weight: 600; }
+
+/* ===== Clock signature section ===== */
+.clock-section{
+  margin-top: 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 40px;
+}
+.clock-legend{ display:flex; gap: 18px; margin-top: 18px; font-size: 12.5px; color: var(--text-dim); }
+.clock-legend div{ display:flex; align-items:center; gap:7px; }
+.sw{ width:10px; height:10px; border-radius: 3px; display:inline-block; }
+.sw-green{ background: var(--green); }
+.sw-blue{ background: var(--blue); }
+.sw-dim{ background: var(--text-faint); }
+.clock-wrap{ display:flex; justify-content:center; }
+#hourClock{ width: 100%; max-width: 360px; height: auto; }
+.clock-text strong{ color: var(--text); font-family: var(--font-mono); }
+
+/* ===== Chart grid ===== */
+.chart-grid{
+  margin-top: 64px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.panel{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px 12px;
+  min-height: 300px;
+  display:flex; flex-direction: column;
+}
+.panel-wide{ grid-column: span 2; }
+.panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+.panel-head h3{ margin:0; font-family: var(--font-display); font-size: 15.5px; font-weight: 600; }
+.panel-tag{ font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); border:1px solid var(--border); padding: 3px 9px; border-radius: 999px; }
+.panel-body{ position: relative; flex: 1; min-height: 240px; }
+
+.tab-switch{ display:flex; gap:6px; background: var(--surface-2); border:1px solid var(--border); border-radius:999px; padding:3px; }
+.tab-btn{
+  font-family: var(--font-body); font-size: 11.5px; font-weight: 600; color: var(--text-dim);
+  background: none; border: none; padding: 5px 12px; border-radius: 999px; cursor: pointer;
+  transition: all .15s ease;
+}
+.tab-btn.active{ background: linear-gradient(90deg, var(--green-dim), var(--blue-dim)); color: #06110c; color: var(--text); }
+
+/* worst list */
+#worstList{ display:flex; flex-direction: column; gap: 10px; justify-content: center; }
+.worst-row{ display:grid; grid-template-columns: 22px 1fr auto auto; align-items:center; gap: 14px; font-size: 13.5px; }
+.worst-rank{ font-family: var(--font-mono); color: var(--text-faint); }
+.worst-name{ color: var(--text); }
+.worst-bar-wrap{ width: 160px; height: 6px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.worst-bar{ height: 100%; background: linear-gradient(90deg, var(--amber), var(--green)); }
+.worst-qty{ font-family: var(--font-mono); color: var(--text-dim); min-width: 70px; text-align:right; }
+
+/* footer */
+.foot{ text-align:center; padding: 30px 20px 50px; color: var(--text-faint); font-size: 12.5px; position: relative; z-index:1; }
+.foot code{ font-family: var(--font-mono); color: var(--text-dim); }
+
+/* ===== Responsive ===== */
+@media (max-width: 980px){
+  .kpi-grid{ grid-template-columns: repeat(2, 1fr); }
+  .kpi-hero{ grid-column: span 2; }
+  .insight-grid{ grid-template-columns: 1fr; }
+  .clock-section{ grid-template-columns: 1fr; }
+  .chart-grid{ grid-template-columns: 1fr; }
+  .panel-wide{ grid-column: span 1; }
+}
+@media (max-width: 560px){
+  .kpi-grid{ grid-template-columns: 1fr; }
+  .kpi-hero{ grid-column: span 1; }
+  .top-inner{ padding: 14px 18px; }
+  main{ padding: 0 16px 60px; }
+}
+
+/* focus visibility */
+button:focus-visible{ outline: 2px solid var(--green); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  .kpi-card{ transition: none; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="crust-glow"></div>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="brand-mark">🍕</span>
+      <div>
+        <h1>Pizza Sales <span class="accent">Analytics</span></h1>
+        <p class="brand-sub">Panel de ventas · <span id="dateRange">—</span></p>
+      </div>
+    </div>
+    <div class="top-badge">
+      <span class="dot"></span> Datos cargados: <strong id="rowCount">—</strong> pedidos
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- KPI STRIP -->
+  <section class="kpi-grid" aria-label="Indicadores clave">
+    <div class="kpi-card kpi-hero">
+      <span class="kpi-label">Ingresos totales</span>
+      <span class="kpi-value" id="kpiRevenue">—</span>
+      <span class="kpi-foot">Año fiscal 2015 completo</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Pedidos</span>
+      <span class="kpi-value" id="kpiOrders">—</span>
+      <span class="kpi-foot" id="kpiOrdersFoot">—</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Pizzas vendidas</span>
+      <span class="kpi-value" id="kpiPizzas">—</span>
+      <span class="kpi-foot" id="kpiPizzasFoot">—</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Ticket promedio</span>
+      <span class="kpi-value" id="kpiAOV">—</span>
+      <span class="kpi-foot">por pedido</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Variedades</span>
+      <span class="kpi-value" id="kpiVarieties">—</span>
+      <span class="kpi-foot">sabores en el menú</span>
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section class="insights" aria-label="Insights principales">
+    <h2 class="section-title"><span class="num">01</span> Hallazgos clave</h2>
+    <div class="insight-grid" id="insightGrid"></div>
+  </section>
+
+  <!-- SIGNATURE: HOURLY CLOCK -->
+  <section class="clock-section">
+    <div class="clock-text">
+      <h2 class="section-title"><span class="num">02</span> El reloj del horno</h2>
+      <p class="section-desc">Cada gajo representa una hora del día. Cuanto más largo, más pedidos se cocinaron en esa franja. El horno se enciende a las <strong id="clockOpen">—</strong> y cierra a las <strong id="clockClose">—</strong>, con la hora pico a las <strong id="clockPeak">—</strong>.</p>
+      <div class="clock-legend">
+        <div><span class="sw sw-green"></span>Alta demanda</div>
+        <div><span class="sw sw-blue"></span>Demanda media</div>
+        <div><span class="sw sw-dim"></span>Baja demanda</div>
+      </div>
+    </div>
+    <div class="clock-wrap">
+      <svg id="hourClock" viewBox="0 0 400 400"></svg>
+    </div>
+  </section>
+
+  <!-- CHART GRID -->
+  <section class="chart-grid" aria-label="Gráficos de ventas">
+
+    <div class="panel panel-wide">
+      <div class="panel-head">
+        <h3>Ingresos por mes</h3>
+        <span class="panel-tag">Tendencia anual</span>
+      </div>
+      <div class="panel-body"><canvas id="chartMonthly"></canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Ingresos por categoría</h3>
+        <span class="panel-tag">Mix de producto</span>
+      </div>
+      <div class="panel-body"><canvas id="chartCategory"></canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Ingresos por tamaño</h3>
+        <span class="panel-tag">Preferencia de porción</span>
+      </div>
+      <div class="panel-body"><canvas id="chartSize"></canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Pedidos por día de semana</h3>
+        <span class="panel-tag">Estacionalidad semanal</span>
+      </div>
+      <div class="panel-body"><canvas id="chartDow"></canvas></div>
+    </div>
+
+    <div class="panel panel-tabs">
+      <div class="panel-head">
+        <h3>Top 10 sabores</h3>
+        <div class="tab-switch">
+          <button class="tab-btn active" data-tab="rev">Por ingresos</button>
+          <button class="tab-btn" data-tab="qty">Por unidades</button>
+        </div>
+      </div>
+      <div class="panel-body"><canvas id="chartTop"></canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Precio medio por tamaño</h3>
+        <span class="panel-tag">USD / unidad</span>
+      </div>
+      <div class="panel-body"><canvas id="chartPrice"></canvas></div>
+    </div>
+
+    <div class="panel panel-wide">
+      <div class="panel-head">
+        <h3>Los 5 sabores menos vendidos</h3>
+        <span class="panel-tag">Candidatos a revisar en el menú</span>
+      </div>
+      <div class="panel-body" id="worstList"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Panel generado a partir de <code>pizza_sales.csv</code> · 2015 · Todos los valores en USD</p>
+</footer>
+
+<script>
+const DATA = {"kpis": {"total_revenue": 817860.05, "total_orders": 21350, "total_pizzas": 49574, "avg_order_value": 38.31, "avg_pizzas_per_order": 2.32, "unique_pizza_types": 32, "date_min": "01/01/2015", "date_max": "31/12/2015", "peak_hour": 12, "peak_day": "Friday", "best_pizza": "The Thai Chicken Pizza", "best_category": "Classic"}, "rev_by_category": {"labels": ["Classic", "Supreme", "Chicken", "Veggie"], "values": [220053.1, 208197.0, 195919.5, 193690.45]}, "qty_by_category": {"labels": ["Classic", "Supreme", "Veggie", "Chicken"], "values": [14888, 11987, 11649, 11050]}, "rev_by_size": {"labels": ["Large", "Medium", "Small", "Extra Large", "XX Large"], "values": [375318.7, 249382.25, 178076.5, 14076.0, 1006.6]}, "qty_by_size": {"labels": ["Large", "Medium", "Small", "Extra Large", "XX Large"], "values": [18956, 15635, 14403, 552, 28]}, "monthly": {"labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "revenue": [69793.3, 65159.6, 70397.1, 68736.8, 71402.75, 68230.2, 72557.9, 68278.25, 64180.05, 64027.6, 70395.35, 64701.15], "orders": [1845, 1685, 1840, 1799, 1853, 1773, 1935, 1841, 1661, 1646, 1792, 1680], "pizzas": [4232, 3961, 4261, 4151, 4328, 4107, 4392, 4168, 3890, 3883, 4266, 3935]}, "dow": {"labels": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "revenue": [107329.55, 114133.8, 114408.4, 123528.5, 136073.9, 123182.4, 99203.5], "orders": [2794, 2973, 3024, 3239, 3538, 3158, 2624], "pizzas": [6485, 6895, 6946, 7478, 8242, 7493, 6035]}, "hourly": {"labels": [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "revenue": [83.0, 303.65, 44935.8, 111877.9, 106065.7, 59201.4, 52992.3, 70055.4, 86237.45, 89296.85, 72628.9, 58215.4, 42029.8, 22815.15, 1121.35], "orders": [1, 8, 1231, 2520, 2455, 1472, 1468, 1920, 2336, 2399, 2009, 1642, 1198, 663, 28]}, "top_rev": {"labels": ["The Thai Chicken Pizza", "The Barbecue Chicken Pizza", "The California Chicken Pizza", "The Classic Deluxe Pizza", "The Spicy Italian Pizza", "The Southwest Chicken Pizza", "The Italian Supreme Pizza", "The Hawaiian Pizza", "The Four Cheese Pizza", "The Sicilian Pizza"], "revenue": [43434.25, 42768.0, 41409.5, 38180.5, 34831.25, 34705.75, 33476.75, 32273.25, 32265.7, 30940.5], "qty": [2371, 2432, 2370, 2453, 1924, 1917, 1884, 2422, 1902, 1938]}, "top_qty": {"labels": ["The Classic Deluxe Pizza", "The Barbecue Chicken Pizza", "The Hawaiian Pizza", "The Pepperoni Pizza", "The Thai Chicken Pizza", "The California Chicken Pizza", "The Sicilian Pizza", "The Spicy Italian Pizza", "The Southwest Chicken Pizza", "The Big Meat Pizza"], "revenue": [38180.5, 42768.0, 32273.25, 30161.75, 43434.25, 41409.5, 30940.5, 34831.25, 34705.75, 22968.0], "qty": [2453, 2432, 2422, 2418, 2371, 2370, 1938, 1924, 1917, 1914]}, "bottom_qty": {"labels": ["The Brie Carre Pizza", "The Mediterranean Pizza", "The Calabrese Pizza", "The Spinach Supreme Pizza", "The Soppressata Pizza"], "revenue": [11588.5, 15360.5, 15934.25, 15277.75, 16425.75], "qty": [490, 934, 937, 950, 961]}, "avg_price_size": {"labels": ["Extra Large", "Large", "Medium", "Small", "XX Large"], "values": [25.5, 19.8, 15.95, 12.36, 35.95]}};
+/* ===== Helpers ===== */
+const fmtUSD = n => '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
+const fmtUSD2 = n => '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtInt = n => n.toLocaleString('en-US');
+const fmtHour = h => {
+  const period = h < 12 ? 'AM' : 'PM';
+  let hh = h % 12; if(hh === 0) hh = 12;
+  return hh + (h<10?':00 ':':00 ') + period;
+};
+
+Chart.defaults.color = '#8ba3ab';
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.borderColor = '#1b2b34';
+
+const GREEN = '#33e6a8';
+const GREEN_DIM = 'rgba(51,230,168,0.18)';
+const BLUE = '#3d95ff';
+const BLUE_DIM = 'rgba(61,149,255,0.18)';
+const AMBER = '#ffb04d';
+const PALETTE = ['#33e6a8', '#3d95ff', '#ffb04d', '#8b7bff', '#ff6f91', '#4dd9ff'];
+
+/* ===== Header / KPIs ===== */
+document.getElementById('dateRange').textContent = `${DATA.kpis.date_min} — ${DATA.kpis.date_max}`;
+document.getElementById('rowCount').textContent = fmtInt(DATA.kpis.total_orders);
+document.getElementById('kpiRevenue').textContent = fmtUSD(DATA.kpis.total_revenue);
+document.getElementById('kpiOrders').textContent = fmtInt(DATA.kpis.total_orders);
+document.getElementById('kpiOrdersFoot').textContent = `${DATA.kpis.avg_pizzas_per_order} pizzas / pedido`;
+document.getElementById('kpiPizzas').textContent = fmtInt(DATA.kpis.total_pizzas);
+document.getElementById('kpiPizzasFoot').textContent = `${DATA.kpis.unique_pizza_types} sabores distintos`;
+document.getElementById('kpiAOV').textContent = fmtUSD2(DATA.kpis.avg_order_value);
+document.getElementById('kpiVarieties').textContent = DATA.kpis.unique_pizza_types;
+
+/* ===== Insights (generated from data) ===== */
+const bestCatIdx = 0;
+const bestSize = DATA.rev_by_size.labels[0];
+const worstSize = DATA.rev_by_size.labels[DATA.rev_by_size.labels.length - 1];
+const peakDayRevenue = DATA.dow.revenue[DATA.dow.labels.indexOf(DATA.kpis.peak_day)];
+const sundayIdx = DATA.dow.labels.indexOf('Sunday');
+const insights = [
+  `<b>${DATA.kpis.best_pizza}</b> es el sabor con más ingresos, liderando la categoría <b>${DATA.kpis.best_category}</b>, la más rentable del año.`,
+  `El tamaño <b>${bestSize}</b> genera la mayor parte de los ingresos, mientras que <b>${worstSize}</b> apenas participa — posible oportunidad de ajustar el mix de tamaños.`,
+  `<b>${DATA.kpis.peak_day}</b> es el día más fuerte de la semana con ${fmtUSD(peakDayRevenue)} en ventas, mientras que <b>Domingo</b> es el más flojo.`,
+  `La hora pico del horno es <b>${fmtHour(DATA.kpis.peak_hour)}</b>, coincidiendo con el almuerzo — casi el ${Math.round(DATA.hourly.orders[DATA.hourly.labels.indexOf(DATA.kpis.peak_hour)] / DATA.kpis.total_orders * 100)}% de los pedidos del día ocurren en esa sola hora.`,
+  `El ticket promedio es de <b>${fmtUSD2(DATA.kpis.avg_order_value)}</b> con <b>${DATA.kpis.avg_pizzas_per_order}</b> pizzas por pedido — hay margen para promociones de combos que suban el volumen por ticket.`,
+  `<b>${DATA.bottom_qty ? DATA.bottom_qty.labels[0] : ''}</b> es el sabor menos pedido del catálogo — candidato a revisar receta, precio o retirarlo del menú.`
+];
+document.getElementById('insightGrid').innerHTML = insights.map(t => `<div class="insight-card">${t}</div>`).join('');
+
+/* ===== Signature: hourly radial clock ===== */
+function buildClock(){
+  const svg = document.getElementById('hourClock');
+  const ns = 'http://www.w3.org/2000/svg';
+  const cx = 200, cy = 200, rInner = 60, rMax = 155;
+  const hours = DATA.hourly.labels;
+  const orders = DATA.hourly.orders;
+  const maxOrders = Math.max(...orders);
+
+  // build full 24h array (fill missing hours with 0)
+  const full = Array.from({length:24}, (_, h) => {
+    const idx = hours.indexOf(h);
+    return idx >= 0 ? orders[idx] : 0;
+  });
+
+  const anglePer = (2 * Math.PI) / 24;
+
+  full.forEach((val, h) => {
+    const startAngle = h * anglePer - Math.PI/2;
+    const endAngle = (h+1) * anglePer - Math.PI/2;
+    const r = val === 0 ? rInner + 2 : rInner + (val / maxOrders) * (rMax - rInner);
+
+    const pad = 0.018; // gap between slices
+    const a1 = startAngle + pad;
+    const a2 = endAngle - pad;
+
+    const x1 = cx + rInner * Math.cos(a1);
+    const y1 = cy + rInner * Math.sin(a1);
+    const x2 = cx + r * Math.cos(a1);
+    const y2 = cy + r * Math.sin(a1);
+    const x3 = cx + r * Math.cos(a2);
+    const y3 = cy + r * Math.sin(a2);
+    const x4 = cx + rInner * Math.cos(a2);
+    const y4 = cy + rInner * Math.sin(a2);
+
+    const ratio = val / maxOrders;
+    let color = '#1c2b34';
+    if(val > 0){
+      color = ratio > 0.66 ? GREEN : ratio > 0.33 ? BLUE : '#4a6572';
+    }
+
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2} A ${r} ${r} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${rInner} ${rInner} 0 0 0 ${x1} ${y1} Z`);
+    path.setAttribute('fill', color);
+    path.setAttribute('opacity', val > 0 ? '0.92' : '0.35');
+    const title = document.createElementNS(ns, 'title');
+    title.textContent = `${fmtHour(h)} — ${fmtInt(val)} pedidos`;
+    path.appendChild(title);
+    svg.appendChild(path);
+
+    // hour label for every 3rd hour
+    if(h % 3 === 0){
+      const labelAngle = startAngle + anglePer/2;
+      const lx = cx + (rMax + 18) * Math.cos(labelAngle);
+      const ly = cy + (rMax + 18) * Math.sin(labelAngle);
+      const text = document.createElementNS(ns, 'text');
+      text.setAttribute('x', lx);
+      text.setAttribute('y', ly);
+      text.setAttribute('fill', '#5c747c');
+      text.setAttribute('font-size', '11');
+      text.setAttribute('font-family', 'JetBrains Mono, monospace');
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dominant-baseline', 'middle');
+      text.textContent = (h < 10 ? '0'+h : h) + 'h';
+      svg.appendChild(text);
+    }
+  });
+
+  // center label
+  const centerVal = document.createElementNS(ns, 'text');
+  centerVal.setAttribute('x', cx); centerVal.setAttribute('y', cy - 6);
+  centerVal.setAttribute('text-anchor', 'middle');
+  centerVal.setAttribute('fill', '#eaf3f2');
+  centerVal.setAttribute('font-family', 'JetBrains Mono, monospace');
+  centerVal.setAttribute('font-size', '22');
+  centerVal.setAttribute('font-weight', '700');
+  centerVal.textContent = fmtHour(DATA.kpis.peak_hour);
+  svg.appendChild(centerVal);
+
+  const centerLabel = document.createElementNS(ns, 'text');
+  centerLabel.setAttribute('x', cx); centerLabel.setAttribute('y', cy + 16);
+  centerLabel.setAttribute('text-anchor', 'middle');
+  centerLabel.setAttribute('fill', '#5c747c');
+  centerLabel.setAttribute('font-size', '11');
+  centerLabel.textContent = 'hora pico';
+  svg.appendChild(centerLabel);
+
+  const activeHours = hours.filter((h,i) => orders[i] > 0).sort((a,b)=>a-b);
+  document.getElementById('clockOpen').textContent = fmtHour(activeHours[0]);
+  document.getElementById('clockClose').textContent = fmtHour(activeHours[activeHours.length-1]);
+  document.getElementById('clockPeak').textContent = fmtHour(DATA.kpis.peak_hour);
+}
+buildClock();
+
+/* ===== Charts ===== */
+const gridColor = 'rgba(27,43,52,0.6)';
+const commonScales = {
+  x: { grid: { color: gridColor, drawTicks:false }, ticks: { color:'#8ba3ab', font:{size:11} } },
+  y: { grid: { color: gridColor, drawTicks:false }, ticks: { color:'#8ba3ab', font:{size:11} }, beginAtZero:true }
+};
+
+// 1. Monthly revenue line
+new Chart(document.getElementById('chartMonthly'), {
+  type: 'line',
+  data: {
+    labels: DATA.monthly.labels,
+    datasets: [{
+      label: 'Ingresos',
+      data: DATA.monthly.revenue,
+      borderColor: GREEN,
+      backgroundColor: ctx => {
+        const g = ctx.chart.ctx.createLinearGradient(0,0,0,240);
+        g.addColorStop(0, 'rgba(51,230,168,0.35)');
+        g.addColorStop(1, 'rgba(51,230,168,0)');
+        return g;
+      },
+      fill: true, tension: .4, pointRadius: 3, pointBackgroundColor: GREEN, pointBorderColor: '#06110c', borderWidth: 2.5
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: c => fmtUSD(c.parsed.y) } } },
+    scales: {
+      x: commonScales.x,
+      y: { ...commonScales.y, ticks: { ...commonScales.y.ticks, callback: v => '$'+(v/1000)+'k' } }
+    }
+  }
+});
+
+// 2. Revenue by category doughnut
+new Chart(document.getElementById('chartCategory'), {
+  type: 'doughnut',
+  data: {
+    labels: DATA.rev_by_category.labels,
+    datasets: [{
+      data: DATA.rev_by_category.values,
+      backgroundColor: PALETTE,
+      borderColor: '#0d161d',
+      borderWidth: 3,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false, cutout: '62%',
+    plugins:{
+      legend:{ position:'bottom', labels:{ color:'#8ba3ab', boxWidth:10, boxHeight:10, padding:14, font:{size:11.5} } },
+      tooltip:{ callbacks:{ label: c => `${c.label}: ${fmtUSD(c.parsed)}` } }
+    }
+  }
+});
+
+// 3. Revenue by size bar
+new Chart(document.getElementById('chartSize'), {
+  type: 'bar',
+  data: {
+    labels: DATA.rev_by_size.labels,
+    datasets: [{
+      data: DATA.rev_by_size.values,
+      backgroundColor: BLUE,
+      borderRadius: 6,
+      maxBarThickness: 38
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: c => fmtUSD(c.parsed.x) } } },
+    scales: {
+      x: { ...commonScales.x, ticks:{ ...commonScales.x.ticks, callback: v => '$'+(v/1000)+'k' } },
+      y: commonScales.y
+    }
+  }
+});
+
+// 4. Day of week bar
+new Chart(document.getElementById('chartDow'), {
+  type: 'bar',
+  data: {
+    labels: DATA.dow.labels.map(d => d.slice(0,3)),
+    datasets: [{
+      data: DATA.dow.orders,
+      backgroundColor: DATA.dow.labels.map(d => d === DATA.kpis.peak_day ? GREEN : 'rgba(61,149,255,0.55)'),
+      borderRadius: 6,
+      maxBarThickness: 34
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: c => fmtInt(c.parsed.y) + ' pedidos' } } },
+    scales: commonScales
+  }
+});
+
+// 5. Top pizzas (tabs: revenue / qty)
+let topChart;
+function renderTop(tab){
+  const src = tab === 'qty' ? DATA.top_qty : DATA.top_rev;
+  const values = tab === 'qty' ? src.qty : src.revenue;
+  const cfg = {
+    type: 'bar',
+    data: {
+      labels: src.labels.map(l => l.replace('The ','').replace(' Pizza','')),
+      datasets: [{
+        data: values,
+        backgroundColor: GREEN,
+        borderRadius: 5,
+        maxBarThickness: 18
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{ callbacks:{ label: c => tab==='qty' ? fmtInt(c.parsed.x)+' unidades' : fmtUSD(c.parsed.x) } }
+      },
+      scales: {
+        x: { ...commonScales.x, ticks:{ ...commonScales.x.ticks, callback: v => tab==='qty' ? v : '$'+(v/1000)+'k' } },
+        y: { ...commonScales.y, ticks:{ ...commonScales.y.ticks, font:{size:10.5} } }
+      }
+    }
+  };
+  if(topChart) topChart.destroy();
+  topChart = new Chart(document.getElementById('chartTop'), cfg);
+}
+renderTop('rev');
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTop(btn.dataset.tab);
+  });
+});
+
+// 6. Avg price by size
+new Chart(document.getElementById('chartPrice'), {
+  type: 'bar',
+  data: {
+    labels: DATA.avg_price_size.labels,
+    datasets: [{
+      data: DATA.avg_price_size.values,
+      backgroundColor: AMBER,
+      borderRadius: 6,
+      maxBarThickness: 34
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: c => fmtUSD2(c.parsed.y) } } },
+    scales: {
+      x: commonScales.x,
+      y: { ...commonScales.y, ticks:{ ...commonScales.y.ticks, callback: v => '$'+v } }
+    }
+  }
+});
+
+// 7. Worst sellers list
+const maxWorstQty = Math.max(...DATA.bottom_qty.qty);
+document.getElementById('worstList').innerHTML = DATA.bottom_qty.labels.map((name, i) => `
+  <div class="worst-row">
+    <span class="worst-rank">0${i+1}</span>
+    <span class="worst-name">${name}</span>
+    <span class="worst-bar-wrap"><span class="worst-bar" style="width:${(DATA.bottom_qty.qty[i]/maxWorstQty*100).toFixed(0)}%"></span></span>
+    <span class="worst-qty">${fmtInt(DATA.bottom_qty.qty[i])} uds</span>
+  </div>
+`).join('');
+
+</script>
+</body>
+</html>
