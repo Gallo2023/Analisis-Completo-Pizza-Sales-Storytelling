@@ -26,7 +26,7 @@ Dashboard Excel
 - Claude Asistencia + Analisis + Hallazgos + Dashboard (Html Interactivo) + Aplicando Skill (/build-dashboard
  ).
 
-Pruebas Reporting Claude:
+Pruebas Reporting Claude Prompt (Html Basico):
 
 <img src="./NewClaude/Dash Pizza Claude1.png" width="500"/>
 
