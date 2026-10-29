@@ -31,7 +31,7 @@ Pruebas Reporting Claude:
 <img src="./NewClaude/Dash Pizza Claude1.png" width="500"/>
 <img src="./NewClaude/Dash Pizza Claude1b.png" width="500"/>
 
-Aplicando Skills:
+Aplicando Skills (Html Interactivo):
 
 <img src="./NewClaude/Dash Pizza Claude2.png" width="500"/>
 <img src="./NewClaude/Dash Pizza Claude2b.png" width="500"/>
