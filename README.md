@@ -27,6 +27,7 @@ Dashboard Excel
  ).
 
 <img src="./NewClaude/Dash Pizza Claude1.png" width="500"/>
+<img src="./NewClaude/Dash Pizza Claude1b.png" width="500"/>
 
 #### 👨‍💻 Author
 ###### Gabriel Gallardo
