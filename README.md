@@ -23,7 +23,8 @@ Dashboard Excel
 - Armado de un dashboard mas completo en Looker Studio.
 - Desarrollo de un Dashboard completo y profesional en Power BI para una presentacion al cliente final.
 - Gemini Nano Banana (Ilustracion Métricas)
-- Claude Asistencia + Analisis + Hallazgos + Dashboard Html interactivo + Aplicacando Skill.
+- Claude Asistencia + Analisis + Hallazgos + Dashboard (Html Interactivo) + Aplicando Skill (/build-dashboard
+ ).
 
 #### 👨‍💻 Author
 ###### Gabriel Gallardo
