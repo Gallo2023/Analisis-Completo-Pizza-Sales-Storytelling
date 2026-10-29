@@ -26,6 +26,8 @@ Dashboard Excel
 - Claude Asistencia + Analisis + Hallazgos + Dashboard (Html Interactivo) + Aplicando Skill (/build-dashboard
  ).
 
+<img src="./NewClaude/"Dash Pizza Claude1.png" width="500"/>
+
 #### 👨‍💻 Author
 ###### Gabriel Gallardo
 🔗 [LinkedIn Profile](https://www.linkedin.com/in/gerardo-gabriel-gallardo-12619ab5)
