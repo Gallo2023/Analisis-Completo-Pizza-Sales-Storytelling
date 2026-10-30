@@ -50,6 +50,9 @@ Aplicando Skills (Html Interactivo):
 
 <img src="./NewClaude/Dash Pizza Claude2b.png" width="500"/>
 
+## ANALISIS ESTADISTICO (Skill /statistical-analysis):
+
+<img src="./Analisis Estadistico Claude/AnalisisEstadisticoSkillClaude.png" width="500"/>
 
 #### 👨‍💻 Author
 ###### Gabriel Gallardo
