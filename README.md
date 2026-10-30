@@ -9,7 +9,7 @@ buscando tendencia, comparativas de ventas y cantidades con diferentes aperturas
 Se sumo una ilustracion resumiendo los principales hallazgos con la asistencia de Gemini Nano Banana.
 <img src="Gemini_Generated_Image.png" width="500"/>
 
-Analisis completo preliminar (ETL + EDA + Calculos Estadisticos Basicos)
+Analisis completo preliminar (ETL + EDA + Calculos Estadisticos Basicos + Resumen)
 
 ## 🖼️ Vista previa
 
@@ -23,9 +23,8 @@ Dashboard Excel
 - Armado de un dashboard mas completo en Looker Studio.
 - Desarrollo de un Dashboard completo y profesional en Power BI para una presentacion al cliente final.
 - Gemini Nano Banana (Ilustracion Métricas)
-- Claude Asistencia + Analisis + Hallazgos + Dashboard (Html Interactivo) + Aplicando Skill (/build-dashboard
- ).
-- Analisis ETL + EDA + Resumen (Python - Jupyter Notebook)
+- Claude + Analisis + Hallazgos + Dashboard (Html Interactivo) + Aplicando Skill (/build-dashboard).
+- Python - Jupyter Notebook (Claude)
 
 
 ## ASISTENCIA CLAUDE: 
