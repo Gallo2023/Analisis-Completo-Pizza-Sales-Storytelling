@@ -25,6 +25,7 @@ Dashboard Excel
 - Gemini Nano Banana (Ilustracion Métricas)
 - Claude Asistencia + Analisis + Hallazgos + Dashboard (Html Interactivo) + Aplicando Skill (/build-dashboard
  ).
+- Analisis ETL + EDA + Resumen (Python - Jupyter Notebook)
 
 
 ## ASISTENCIA CLAUDE: 
