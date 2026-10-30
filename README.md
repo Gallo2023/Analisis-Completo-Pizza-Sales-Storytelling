@@ -9,7 +9,10 @@ buscando tendencia, comparativas de ventas y cantidades con diferentes aperturas
 Se sumo una ilustracion resumiendo los principales hallazgos con la asistencia de Gemini Nano Banana.
 <img src="Gemini_Generated_Image.png" width="500"/>
 
-Analisis completo preliminar (ETL + EDA + Calculos Estadisticos Basicos + Resumen)
+
+Analisis completo preliminar Python Jupiter Notebook (ETL + EDA + Calculos Estadisticos Basicos + Resumen)
+
+<img src="./Claude/AnalisisPython.png" width="500"/>
 
 ## 🖼️ Vista previa
 
