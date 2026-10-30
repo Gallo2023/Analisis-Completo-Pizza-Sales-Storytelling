@@ -28,6 +28,7 @@ Dashboard Excel
 - Gemini Nano Banana (Ilustracion Métricas)
 - Claude + Analisis + Hallazgos + Dashboard (Html Interactivo) + Aplicando Skill (/build-dashboard).
 - Python - Jupyter Notebook (Claude)
+- Prueba Dashboard en ChatGPT aplicando skill de Claude.
 
 
 ## ASISTENCIA CLAUDE: 
@@ -51,6 +52,9 @@ Aplicando Skills (Html Interactivo):
 <img src="./NewClaude/Dash Pizza Claude2b.png" width="500"/>
 
 ## ANALISIS ESTADISTICO (Skill /statistical-analysis):
+
+Realizando una exploracion de los valores mas significativos identificando Outliers, Tendencias, 
+detalles con diferentes aperturas.
 
 <img src="./Analisis Estadistico Claude/AnalisisEstadisticoSkillClaude.png" width="500"/>
 
