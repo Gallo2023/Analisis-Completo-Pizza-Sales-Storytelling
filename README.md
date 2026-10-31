@@ -1,5 +1,7 @@
 # Proyecto Analisis punto a punta ventas de Pizza    
 
+<img src="Portada DashVentas.png" width="500"/>
+
 ## 📊 Fase 1 Análisis preliminar en Excel
 
 Este proyecto inicia un proceso de analisis completo de venta de pizzas.
